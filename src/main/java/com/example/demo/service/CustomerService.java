@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -13,8 +14,11 @@ public class CustomerService {
     CustomerRepository customerRepository;
 
     public void createCustomer(Customer customer) {
+        Optional<Customer> customerOptional = customerRepository.findCustomerByEmail(customer.getEmail());
+        if (customerOptional.isPresent()) {
+            throw new IllegalStateException("Email taken");
+        }
         customerRepository.save(customer);
-
     }
 
     public List<Customer> getCustomers() {
