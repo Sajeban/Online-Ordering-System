@@ -3,9 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.model.Customer;
 import com.example.demo.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "customer")
@@ -27,7 +29,13 @@ public class CustomerController {
         return customerService.getCustomers();
     }
 
+    @GetMapping (path = "{customer_id}")
+    public Customer getParticularCustomer(@PathVariable("customer_id") int id) {
+        return customerService.getParticularCustomer(id);
+    }
 
-
-
+    @PostMapping(path = "/login")
+    public void loginCustomer(@RequestBody Map<String,String> json) {
+         customerService.loginCustomer(json.get("username"),json.get("password"));
+    }
 }
