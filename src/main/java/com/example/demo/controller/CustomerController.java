@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.Customer;
 import com.example.demo.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +35,12 @@ public class CustomerController {
     }
 
     @PostMapping(path = "/login")
-    public void loginCustomer(@RequestBody Map<String,String> json) {
-         customerService.loginCustomer(json.get("username"),json.get("password"));
+    public ResponseEntity<Map<String, String>> loginCustomer(@RequestBody Map<String,String> json) {
+        return customerService.loginCustomer(json.get("username"),json.get("password"));
     }
+    @DeleteMapping(path = "{customer_id}")
+    public ResponseEntity deleteCustomer(@PathVariable("customer_id") int id){
+        return customerService.deleteCustomer(id);
+    }
+
 }

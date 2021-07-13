@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.example.demo.util.CustomerStatus;
+
 import javax.persistence.*;
 
 @Entity(name = "Customer")
@@ -18,6 +20,7 @@ public class Customer {
     private String postalCode;
     private String country;
     private String phone;
+    private CustomerStatus customerStatus;
 
     public Customer() {
     }
@@ -25,6 +28,14 @@ public class Customer {
     public Customer(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public CustomerStatus getCustomerStatus() {
+        return customerStatus;
+    }
+
+    public void setCustomerStatus(CustomerStatus customerStatus) {
+        this.customerStatus = customerStatus;
     }
 
     public String getAddress() {

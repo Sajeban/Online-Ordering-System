@@ -1,12 +1,12 @@
 package com.example.demo.model;
 
-import com.example.demo.util.Status;
+import com.example.demo.util.DeliveryStatus;
 
 import java.util.List;
 
 public class Order {
     int customerID;
-    Status status;
+    DeliveryStatus deliveryStatus;
     double totalPrice;
     String notes;
     List<Product> productList;
@@ -14,9 +14,9 @@ public class Order {
     public Order() {
     }
 
-    public Order(int customerID, Status status, List<Product> productList) {
+    public Order(int customerID, DeliveryStatus deliveryStatus, List<Product> productList) {
         this.customerID = customerID;
-        this.status = status;
+        this.deliveryStatus = deliveryStatus;
         this.productList = productList;
     }
 
@@ -28,12 +28,12 @@ public class Order {
         this.customerID = customerID;
     }
 
-    public Status getStatus() {
-        return status;
+    public DeliveryStatus getStatus() {
+        return deliveryStatus;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
     }
 
     public double getTotalPrice() {
@@ -63,7 +63,7 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "customerID=" + customerID +
-                ", status=" + status +
+                ", status=" + deliveryStatus +
                 ", totalPrice=" + totalPrice +
                 ", notes='" + notes + '\'' +
                 ", productList=" + productList +

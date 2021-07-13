@@ -1,6 +1,6 @@
 package com.example.demo.util;
 
-public enum Status {
+public enum DeliveryStatus {
     DELIVERED,
     ENROUTE,
     PROCESSING,
