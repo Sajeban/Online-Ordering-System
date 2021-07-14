@@ -41,13 +41,13 @@ public class CustomerController {
     }
 
     @DeleteMapping(path = "{customer_id}")
-    public ResponseEntity deleteCustomer(@PathVariable("customer_id") int id) {
+    public ResponseEntity<Void> deleteCustomer(@PathVariable("customer_id") int id) {
         return customerService.deleteCustomer(id);
     }
 
     @PostMapping(path = "{customer_id}/shipping-details")
-    public void addShipping(@RequestBody Shipping shipping, @PathVariable("customer_id") int id) {
-        customerService.createShipping(shipping, id);
+    public ResponseEntity<Void> addShipping(@RequestBody Shipping shipping, @PathVariable("customer_id") int id) {
+        return customerService.createShipping(shipping, id);
     }
 
     @GetMapping(path = "/{customer_id}/shipping-details")

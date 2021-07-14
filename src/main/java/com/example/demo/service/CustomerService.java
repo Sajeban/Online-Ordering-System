@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,9 @@ public class CustomerService {
 
     public Customer getParticularCustomer(int id) {
         Optional<Customer> customerOptional = customerRepository.findCustomerById(id);
+        if (customerOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "username not found or invalid email");
+        }
         return customerOptional.get();
     }
 
@@ -62,7 +67,7 @@ public class CustomerService {
 
     }
 
-    public ResponseEntity deleteCustomer(int id) {
+    public ResponseEntity<Void> deleteCustomer(int id) {
         Optional<Customer> customerOptional = customerRepository.findCustomerById(id);
         if (customerOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found");
@@ -71,21 +76,37 @@ public class CustomerService {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    public void createShipping(Shipping shipping, int id) {
+    public ResponseEntity<Void> createShipping(Shipping shipping, int id) {
         Optional<Customer> customerOptional = customerRepository.findCustomerById(id);
+        if (customerOptional.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found");
+        }
         customerOptional.get().getShippings().add(shipping);
         shipping.setCustomer(customerOptional.get());
         shippingRepository.save(shipping);
-        // customerRepository.save(customerOptional.get());
+
+        //Generating the location to adc to the header of the response
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(shipping.getShippingID())
+                .toUri();
+        return  ResponseEntity.created(location).build();
     }
 
     public List<Shipping> getShippingParticularCustomer(int id) {
         Optional<Customer> customerOptional = customerRepository.findCustomerById(id);
+        if (customerOptional.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found");
+        }
         return customerOptional.get().getShippings();
     }
 
     public Shipping getShipping(int shippingId) {
         Optional<Shipping> shippingOptional = shippingRepository.findShippingByShippingID(shippingId);
+        if (shippingOptional.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Shipping not found");
+        }
         return shippingOptional.get();
     }
 }
