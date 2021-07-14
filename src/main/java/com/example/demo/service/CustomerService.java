@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Customer;
+import com.example.demo.model.Shipping;
 import com.example.demo.repository.CustomerRepository;
+import com.example.demo.repository.ShippingRepository;
 import com.example.demo.util.CustomerStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +21,8 @@ import java.util.Optional;
 public class CustomerService {
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    ShippingRepository shippingRepository;
 
     public void createCustomer(Customer customer) {
         Optional<Customer> customerOptional = customerRepository.findCustomerByEmail(customer.getEmail());
@@ -65,5 +69,23 @@ public class CustomerService {
         }
         customerOptional.get().setCustomerStatus(CustomerStatus.INACTIVE);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    public void createShipping(Shipping shipping, int id) {
+        Optional<Customer> customerOptional = customerRepository.findCustomerById(id);
+        customerOptional.get().getShippings().add(shipping);
+        shipping.setCustomer(customerOptional.get());
+        shippingRepository.save(shipping);
+        // customerRepository.save(customerOptional.get());
+    }
+
+    public List<Shipping> getShippingParticularCustomer(int id) {
+        Optional<Customer> customerOptional = customerRepository.findCustomerById(id);
+        return customerOptional.get().getShippings();
+    }
+
+    public Shipping getShipping(int shippingId) {
+        Optional<Shipping> shippingOptional = shippingRepository.findShippingByShippingID(shippingId);
+        return shippingOptional.get();
     }
 }

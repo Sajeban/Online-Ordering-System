@@ -1,8 +1,11 @@
 package com.example.demo.model;
 
 import com.example.demo.util.CustomerStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "Customer")
 public class Customer {
@@ -21,13 +24,19 @@ public class Customer {
     private String country;
     private String phone;
     private CustomerStatus customerStatus;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "customer")
+    private List<Shipping> shippings = new ArrayList<>();
 
     public Customer() {
     }
 
-    public Customer(int id, String name) {
-        this.id = id;
-        this.name = name;
+    public List<Shipping> getShippings() {
+        return shippings;
+    }
+
+    public void setShippings(List<Shipping> shippings) {
+        this.shippings = shippings;
     }
 
     public CustomerStatus getCustomerStatus() {
